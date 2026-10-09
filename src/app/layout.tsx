@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Noto_Serif_Bengali } from "next/font/google";
 
@@ -7,9 +8,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ToastProvider from "./components/ToastProvider";
 
-const notoSerifBengali = Noto_Serif_Bengali({
-  subsets: ["latin", "bengali"],
-});
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "বাজার দর",
@@ -35,6 +34,10 @@ interface IProduct {
   };
 }
 
+const notoSerifBengali = Noto_Serif_Bengali({
+  subsets: ["latin", "bengali"],
+});
+
 const RootLayout = async ({
   children,
 }: LayoutProps<"/">) => {
@@ -58,14 +61,12 @@ const RootLayout = async ({
       lang="bn"
       className={`${notoSerifBengali.className} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#f3f7f3]">
+      <body className="flex min-h-full flex-col bg-[#f3f7f3]">
         <Navbar products={products} />
 
         <ToastProvider />
 
-        <main className="flex-1">
-          {children}
-        </main>
+        <main className="flex-1">{children}</main>
 
         <Footer />
       </body>

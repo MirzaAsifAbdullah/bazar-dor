@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 const NavbarAuth = () => {
   const router = useRouter();
@@ -101,11 +102,11 @@ const NavbarAuth = () => {
         aria-haspopup="menu"
       >
         {user.image ? (
-          <img
-            src={user.image}
+         <Image
+         src={user.image}
             alt={user.name || "প্রোফাইল"}
             className="h-9 w-9 rounded-full object-cover"
-          />
+            />
         ) : (
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-600 text-sm font-bold text-white">
             {user.name?.charAt(0).toUpperCase() || "U"}

@@ -73,14 +73,14 @@ router.refresh();
       <div className="mx-auto max-w-md">
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           <div className="mb-7 text-center">
-            <div className="mb-3 text-4xl">🛒</div>
+           
 
             <h1 className="text-2xl font-bold text-gray-900">
               সাইন ইন করুন
             </h1>
 
             <p className="mt-2 text-sm text-gray-500">
-              আপনার বাজার দর অ্যাকাউন্টে প্রবেশ করুন
+              বিস্তারিত দাম, বাজার তুলনা ও প্রাফাইল দেখতে লগইন করুন
             </p>
           </div>
 
@@ -176,8 +176,22 @@ router.refresh();
             >
               সাইন আপ করুন
             </Link>
+            
+            
           </p>
         </div>
+       <div className="flex justify-center mt-6">
+  <div className="text-center">
+    <p className="text-sm text-gray-500">অথবা</p>
+    <Link
+      href="/"
+      className="font-semibold text-green-600 hover:text-green-700"
+    >
+      হোমপেজে ফিরে যান
+    </Link>
+  </div>
+</div>
+
       </div>
     </main>
   );
