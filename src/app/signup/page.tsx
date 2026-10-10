@@ -18,9 +18,7 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState("");
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!name.trim()) {
@@ -68,9 +66,7 @@ const SignUpPage = () => {
     router.refresh();
   };
 
-  const handleSocialLogin = async (
-    provider: "google" | "github"
-  ) => {
+  const handleSocialLogin = async (provider: "google" | "github") => {
     setSocialLoading(provider);
 
     const { error } = await authClient.signIn.social({
@@ -172,9 +168,7 @@ const SignUpPage = () => {
                 id="confirmPassword"
                 type="password"
                 value={confirmPassword}
-                onChange={(event) =>
-                  setConfirmPassword(event.target.value)
-                }
+                onChange={(event) => setConfirmPassword(event.target.value)}
                 placeholder="পাসওয়ার্ড আবার লিখুন"
                 disabled={loading}
                 autoComplete="new-password"
@@ -194,9 +188,7 @@ const SignUpPage = () => {
           <div className="my-6 flex items-center gap-3">
             <div className="h-px flex-1 bg-gray-200" />
 
-            <span className="text-xs text-gray-400">
-              অথবা
-            </span>
+            <span className="text-xs text-gray-400">অথবা</span>
 
             <div className="h-px flex-1 bg-gray-200" />
           </div>
@@ -208,9 +200,7 @@ const SignUpPage = () => {
               disabled={socialLoading !== ""}
               className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {socialLoading === "google"
-                ? "অপেক্ষা করুন..."
-                : "Google"}
+              {socialLoading === "google" ? "অপেক্ষা করুন..." : "Google"}
             </button>
 
             <button
@@ -219,9 +209,7 @@ const SignUpPage = () => {
               disabled={socialLoading !== ""}
               className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {socialLoading === "github"
-                ? "অপেক্ষা করুন..."
-                : "GitHub"}
+              {socialLoading === "github" ? "অপেক্ষা করুন..." : "GitHub"}
             </button>
           </div>
 

@@ -16,8 +16,8 @@ const Hero = () => {
           </h2>
 
           <p className="mt-3 max-w-xl text-sm leading-6 text-gray-500 sm:text-base">
-            প্রয়োজনীয় পণ্যের আজকের বাজারদর, দামের পরিবর্তন এবং
-            বাজারভিত্তিক তথ্য এক জায়গায়।
+            প্রয়োজনীয় পণ্যের আজকের বাজারদর, দামের পরিবর্তন এবং বাজারভিত্তিক
+            তথ্য এক জায়গায়।
           </p>
 
           <a
@@ -28,9 +28,15 @@ const Hero = () => {
           </a>
         </div>
 
-      
         <div className="hidden shrink-0 md:flex md:h-44 md:w-52 md:items-center md:justify-center">
-          <div className="mr-4"><Image src="/bazar-hero.png" alt="Hero Illustration" width={208} height={176} /></div>
+          <div className="mr-4">
+            <Image
+              src="/bazar-hero.png"
+              alt="Hero Illustration"
+              width={208}
+              height={176}
+            />
+          </div>
         </div>
       </div>
     </section>

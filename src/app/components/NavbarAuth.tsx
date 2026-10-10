@@ -20,10 +20,7 @@ const NavbarAuth = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node)
-      ) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setOpen(false);
       }
     };
@@ -31,10 +28,7 @@ const NavbarAuth = () => {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside
-      );
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -44,9 +38,7 @@ const NavbarAuth = () => {
     const { error } = await authClient.signOut();
 
     if (error) {
-      toast.error(
-        error.message || "সাইন আউট করা যায়নি"
-      );
+      toast.error(error.message || "সাইন আউট করা যায়নি");
 
       setSigningOut(false);
       return;
@@ -61,9 +53,7 @@ const NavbarAuth = () => {
   };
 
   if (isPending) {
-    return (
-      <div className="h-9 w-20 animate-pulse rounded-lg bg-gray-100" />
-    );
+    return <div className="h-9 w-20 animate-pulse rounded-lg bg-gray-100" />;
   }
 
   if (!session?.user) {
@@ -89,10 +79,7 @@ const NavbarAuth = () => {
   const user = session.user;
 
   return (
-    <div
-      ref={menuRef}
-      className="relative"
-    >
+    <div ref={menuRef} className="relative">
       {/* profile button */}
       <button
         type="button"
@@ -102,11 +89,11 @@ const NavbarAuth = () => {
         aria-haspopup="menu"
       >
         {user.image ? (
-         <Image
-         src={user.image}
+          <Image
+            src={user.image}
             alt={user.name || "প্রোফাইল"}
             className="h-9 w-9 rounded-full object-cover"
-            />
+          />
         ) : (
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-600 text-sm font-bold text-white">
             {user.name?.charAt(0).toUpperCase() || "U"}
@@ -137,9 +124,7 @@ const NavbarAuth = () => {
               {user.name || "ব্যবহারকারী"}
             </p>
 
-            <p className="mt-1 truncate text-xs text-gray-500">
-              {user.email}
-            </p>
+            <p className="mt-1 truncate text-xs text-gray-500">{user.email}</p>
           </div>
 
           <div className="p-2">
@@ -162,11 +147,7 @@ const NavbarAuth = () => {
             >
               <span>↪</span>
 
-              <span>
-                {signingOut
-                  ? "সাইন আউট হচ্ছে..."
-                  : "সাইন আউট"}
-              </span>
+              <span>{signingOut ? "সাইন আউট হচ্ছে..." : "সাইন আউট"}</span>
             </button>
           </div>
         </div>

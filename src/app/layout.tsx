@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Noto_Serif_Bengali } from "next/font/google";
 
@@ -38,16 +37,14 @@ const notoSerifBengali = Noto_Serif_Bengali({
   subsets: ["latin", "bengali"],
 });
 
-const RootLayout = async ({
-  children,
-}: LayoutProps<"/">) => {
+const RootLayout = async ({ children }: LayoutProps<"/">) => {
   const res = await fetch(
     "https://api.abcz.workers.dev/api/bazardor/products",
     {
       next: {
         revalidate: 3600,
       },
-    }
+    },
   );
 
   if (!res.ok) {

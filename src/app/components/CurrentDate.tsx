@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-
-
 const CurrentDate = () => {
   const [date, setDate] = useState("");
 
@@ -16,7 +14,7 @@ const CurrentDate = () => {
       timeZone: "Asia/Dhaka",
     }).format(new Date());
 
-    setDate (currentDate);
+    setDate(currentDate);
   }, []);
 
   return <>{date || "লোড হচ্ছে..."}</>;

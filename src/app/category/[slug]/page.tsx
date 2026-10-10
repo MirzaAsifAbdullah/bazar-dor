@@ -1,8 +1,5 @@
 import Link from "next/link";
-
 import ProductCard from "@/app/components/ProductCard";
-
-export const instant = false;
 
 interface ICategory {
   id: string;
@@ -45,34 +42,54 @@ interface ICategoryPageProps {
   }>;
 }
 
-const CategoryPage = async ({
-  params,
-  searchParams,
-}: ICategoryPageProps) => {
+const API_BASE = "https://openapi.programming-hero.com/api/bazardor";
 
-
-  const { slug } = await params;
-  const { sort } = await searchParams;
-
-
-
-  const categoryResponse = await fetch(
-    "https://api.abcz.workers.dev/api/bazardor/categories",
+async function getCategory(slug: string): Promise<ICategory | null> {
+  const response = await fetch(
+    `${API_BASE}/categories/${encodeURIComponent(slug)}`,
     {
-      next: {
-        revalidate: 3600,
-      },
-    }
+      cache: "force-cache",
+    },
   );
 
-  if (!categoryResponse.ok) {
+  if (!response.ok) {
     throw new Error("ক্যাটাগরির তথ্য লোড করা যায়নি");
   }
 
-  const categories: ICategory[] = await categoryResponse.json();
+  const category: ICategory = await response.json();
 
-  const category = categories.find((item) => item.slug === slug);
+  if (!category || !category.slug) {
+    return null;
+  }
 
+  return category;
+}
+
+async function getProducts(slug: string): Promise<IProduct[]> {
+  const response = await fetch(
+    `${API_BASE}/products?category=${encodeURIComponent(slug)}`,
+    {
+      cache: "force-cache",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("এই ক্যাটাগরির পণ্য লোড করা যায়নি");
+  }
+
+  const products: IProduct[] = await response.json();
+
+  return Array.isArray(products) ? products : [];
+}
+
+const CategoryPage = async ({ params, searchParams }: ICategoryPageProps) => {
+  const { slug } = await params;
+  const { sort } = await searchParams;
+
+  const [category, products] = await Promise.all([
+    getCategory(slug),
+    getProducts(slug),
+  ]);
 
   if (!category) {
     return (
@@ -101,46 +118,22 @@ const CategoryPage = async ({
     );
   }
 
-
-
-  const productsResponse = await fetch(
-    `https://api.abcz.workers.dev/api/bazardor/products?category=${encodeURIComponent(
-      slug
-    )}`,
-    {
-      next: {
-        revalidate: 3600,
-      },
-    }
-  );
-
-  if (!productsResponse.ok) {
-    throw new Error("এই ক্যাটাগরির পণ্য লোড করা যায়নি");
-  }
-
-  const products: IProduct[] = await productsResponse.json();
-
-
   const sortedProducts = [...products];
 
   if (sort === "low") {
     sortedProducts.sort((a, b) => a.today - b.today);
-  }
-
-  if (sort === "high") {
+  } else if (sort === "high") {
     sortedProducts.sort((a, b) => b.today - a.today);
   }
 
- 
   return (
     <main className="min-h-[calc(100vh-150px)] bg-[#f3f7f3] px-4 py-8">
       <div className="mx-auto max-w-6xl">
-    
-
+        {/* Category information */}
         <section className="mb-3 rounded-xl border border-gray-200 bg-white px-5 py-4">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-100 text-2xl">
-              {category.icon}
+              {category.icon || "🛒"}
             </div>
 
             <div>
@@ -155,21 +148,14 @@ const CategoryPage = async ({
           </div>
         </section>
 
-       {/* sort */}
-
+        {/* Product sorting */}
         <section className="mb-3 flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3">
           <p className="text-xs text-gray-500">
-            মোট {products.length}টি পণ্য
+            মোট {sortedProducts.length}টি পণ্য
           </p>
 
-          <form
-            method="GET"
-            className="flex items-center gap-2"
-          >
-            <label
-              htmlFor="sort"
-              className="text-xs text-gray-500"
-            >
+          <form method="GET" className="flex items-center gap-2">
+            <label htmlFor="sort" className="text-xs text-gray-500">
               সাজান
             </label>
 
@@ -179,17 +165,9 @@ const CategoryPage = async ({
               defaultValue={sort || "default"}
               className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 outline-none focus:border-green-500"
             >
-              <option value="default">
-                ডিফল্ট
-              </option>
-
-              <option value="low">
-                দাম কম থেকে বেশি
-              </option>
-
-              <option value="high">
-                দাম বেশি থেকে কম
-              </option>
+              <option value="default">ডিফল্ট</option>
+              <option value="low">দাম কম থেকে বেশি</option>
+              <option value="high">দাম বেশি থেকে কম</option>
             </select>
 
             <button
@@ -201,22 +179,16 @@ const CategoryPage = async ({
           </form>
         </section>
 
-       {/* products */}
-
+        {/* Products */}
         {sortedProducts.length > 0 ? (
           <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {sortedProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
+              <ProductCard key={product.id} product={product} />
             ))}
           </section>
         ) : (
           <section className="rounded-xl border border-gray-200 bg-white px-6 py-16 text-center">
-            <div className="mb-4 text-5xl">
-              {category.icon}
-            </div>
+            <div className="mb-4 text-5xl">{category.icon || "🛒"}</div>
 
             <h2 className="text-lg font-bold text-gray-800">
               এই ক্যাটাগরিতে কোনো পণ্য নেই

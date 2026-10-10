@@ -30,15 +30,13 @@ interface IProduct {
 }
 
 const HomePage = async () => {
-
-
   const res = await fetch(
     "https://api.abcz.workers.dev/api/bazardor/products",
     {
       next: {
         revalidate: 3600,
       },
-    }
+    },
   );
 
   if (!res.ok) {
@@ -74,10 +72,7 @@ const HomePage = async () => {
           {increasedProducts.length > 0 ? (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {increasedProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                />
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
@@ -87,7 +82,6 @@ const HomePage = async () => {
           )}
         </section>
 
-        
         <section className="mb-10">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-lg font-bold text-gray-800">
@@ -99,10 +93,7 @@ const HomePage = async () => {
           {decreasedProducts.length > 0 ? (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {decreasedProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                />
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
@@ -116,9 +107,7 @@ const HomePage = async () => {
         <section id="সব-পণ্য">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-gray-800">
-                সব পণ্য
-              </h2>
+              <h2 className="text-lg font-bold text-gray-800">সব পণ্য</h2>
 
               <p className="mt-1 text-xs text-gray-500">
                 মোট {products.length}টি পণ্য
@@ -135,10 +124,7 @@ const HomePage = async () => {
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </section>

@@ -16,9 +16,7 @@ const SignInPage = () => {
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState("");
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!email.trim()) {
@@ -39,22 +37,18 @@ const SignInPage = () => {
     });
 
     if (error) {
-      toast.error(
-        error.message || "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়"
-      );
+      toast.error(error.message || "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়");
       setLoading(false);
       return;
     }
 
-   toast.success("সফলভাবে সাইন ইন হয়েছে");
+    toast.success("সফলভাবে সাইন ইন হয়েছে");
 
-router.push("/");
-router.refresh();
+    router.push("/");
+    router.refresh();
   };
 
-  const handleSocialLogin = async (
-    provider: "google" | "github"
-  ) => {
+  const handleSocialLogin = async (provider: "google" | "github") => {
     setSocialLoading(provider);
 
     const { error } = await authClient.signIn.social({
@@ -73,11 +67,7 @@ router.refresh();
       <div className="mx-auto max-w-md">
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           <div className="mb-7 text-center">
-           
-
-            <h1 className="text-2xl font-bold text-gray-900">
-              সাইন ইন করুন
-            </h1>
+            <h1 className="text-2xl font-bold text-gray-900">সাইন ইন করুন</h1>
 
             <p className="mt-2 text-sm text-gray-500">
               বিস্তারিত দাম, বাজার তুলনা ও প্রাফাইল দেখতে লগইন করুন
@@ -137,9 +127,7 @@ router.refresh();
           <div className="my-6 flex items-center gap-3">
             <div className="h-px flex-1 bg-gray-200" />
 
-            <span className="text-xs text-gray-400">
-              অথবা
-            </span>
+            <span className="text-xs text-gray-400">অথবা</span>
 
             <div className="h-px flex-1 bg-gray-200" />
           </div>
@@ -151,9 +139,7 @@ router.refresh();
               disabled={socialLoading !== ""}
               className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {socialLoading === "google"
-                ? "অপেক্ষা করুন..."
-                : "Google"}
+              {socialLoading === "google" ? "অপেক্ষা করুন..." : "Google"}
             </button>
 
             <button
@@ -162,9 +148,7 @@ router.refresh();
               disabled={socialLoading !== ""}
               className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {socialLoading === "github"
-                ? "অপেক্ষা করুন..."
-                : "GitHub"}
+              {socialLoading === "github" ? "অপেক্ষা করুন..." : "GitHub"}
             </button>
           </div>
 
@@ -176,22 +160,19 @@ router.refresh();
             >
               সাইন আপ করুন
             </Link>
-            
-            
           </p>
         </div>
-       <div className="flex justify-center mt-6">
-  <div className="text-center">
-    <p className="text-sm text-gray-500">অথবা</p>
-    <Link
-      href="/"
-      className="font-semibold text-green-600 hover:text-green-700"
-    >
-      হোমপেজে ফিরে যান
-    </Link>
-  </div>
-</div>
-
+        <div className="flex justify-center mt-6">
+          <div className="text-center">
+            <p className="text-sm text-gray-500">অথবা</p>
+            <Link
+              href="/"
+              className="font-semibold text-green-600 hover:text-green-700"
+            >
+              হোমপেজে ফিরে যান
+            </Link>
+          </div>
+        </div>
       </div>
     </main>
   );
