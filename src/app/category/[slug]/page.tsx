@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ProductCard from "@/app/components/ProductCard";
+import { Suspense } from "react";
 
 interface ICategory {
   id: string;
@@ -34,16 +35,13 @@ interface IProduct {
 }
 
 interface ICategoryPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-  searchParams: Promise<{
-    sort?: string;
-  }>;
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ sort?: string }>;
 }
 
 const API_BASE = "https://openapi.programming-hero.com/api/bazardor";
 
+// Fetch category details
 async function getCategory(slug: string): Promise<ICategory | null> {
   const response = await fetch(
     `${API_BASE}/categories/${encodeURIComponent(slug)}`,
@@ -65,6 +63,7 @@ async function getCategory(slug: string): Promise<ICategory | null> {
   return category;
 }
 
+// Fetch products for the selected category
 async function getProducts(slug: string): Promise<IProduct[]> {
   const response = await fetch(
     `${API_BASE}/products?category=${encodeURIComponent(slug)}`,
@@ -82,7 +81,31 @@ async function getProducts(slug: string): Promise<IProduct[]> {
   return Array.isArray(products) ? products : [];
 }
 
-const CategoryPage = async ({ params, searchParams }: ICategoryPageProps) => {
+// Suspense boundary for URL-dependent data
+export default function CategoryPage(props: ICategoryPageProps) {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-[calc(100vh-150px)] bg-[#f3f7f3] px-4 py-8">
+          <div className="mx-auto max-w-6xl">
+            <div className="rounded-xl border border-gray-200 bg-white px-6 py-16 text-center">
+              <div className="mb-4 text-4xl">🛒</div>
+              <p className="text-sm text-gray-500">ক্যাটাগরি লোড হচ্ছে...</p>
+            </div>
+          </div>
+        </main>
+      }
+    >
+      <CategoryPageContent {...props} />
+    </Suspense>
+  );
+}
+
+// All URL-dependent work happens inside this component
+async function CategoryPageContent({
+  params,
+  searchParams,
+}: ICategoryPageProps) {
   const { slug } = await params;
   const { sort } = await searchParams;
 
@@ -91,6 +114,7 @@ const CategoryPage = async ({ params, searchParams }: ICategoryPageProps) => {
     getProducts(slug),
   ]);
 
+  // Category not found
   if (!category) {
     return (
       <main className="min-h-[calc(100vh-150px)] bg-[#f3f7f3] px-4 py-8">
@@ -118,6 +142,7 @@ const CategoryPage = async ({ params, searchParams }: ICategoryPageProps) => {
     );
   }
 
+  // Sort products by today's price
   const sortedProducts = [...products];
 
   if (sort === "low") {
@@ -151,7 +176,7 @@ const CategoryPage = async ({ params, searchParams }: ICategoryPageProps) => {
         {/* Product sorting */}
         <section className="mb-3 flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3">
           <p className="text-xs text-gray-500">
-            মোট {sortedProducts.length}টি পণ্য
+            মোট {sortedProducts.length.toLocaleString("bn-BD")}টি পণ্য
           </p>
 
           <form method="GET" className="flex items-center gap-2">
@@ -209,6 +234,4 @@ const CategoryPage = async ({ params, searchParams }: ICategoryPageProps) => {
       </div>
     </main>
   );
-};
-
-export default CategoryPage;
+}
