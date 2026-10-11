@@ -1,7 +1,6 @@
 "use client";
-
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -63,6 +62,7 @@ const SignInPage = () => {
   };
 
   return (
+     <Suspense fallback={<div className="p-6 text-center">লোড হচ্ছে...</div>}>
     <main className="min-h-[calc(100vh-150px)] bg-[#f3f7f3] px-4 py-10">
       <div className="mx-auto max-w-md">
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
@@ -175,6 +175,7 @@ const SignInPage = () => {
         </div>
       </div>
     </main>
+        </Suspense>
   );
 };
 

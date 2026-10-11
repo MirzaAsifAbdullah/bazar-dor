@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Noto_Serif_Bengali } from "next/font/google";
 
@@ -6,8 +7,6 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ToastProvider from "./components/ToastProvider";
-
-export const instant = false;
 
 export const metadata: Metadata = {
   title: "বাজার দর",
@@ -37,7 +36,9 @@ const notoSerifBengali = Noto_Serif_Bengali({
   subsets: ["latin", "bengali"],
 });
 
-const RootLayout = async ({ children }: LayoutProps<"/">) => {
+const RootLayout = async ({
+  children,
+}: LayoutProps<"/">) => {
   const res = await fetch(
     "https://api.abcz.workers.dev/api/bazardor/products",
     {
@@ -59,7 +60,9 @@ const RootLayout = async ({ children }: LayoutProps<"/">) => {
       className={`${notoSerifBengali.className} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-[#f3f7f3]">
-        <Navbar products={products} />
+        <Suspense fallback={<div className="h-16" />}>
+          <Navbar products={products} />
+        </Suspense>
 
         <ToastProvider />
 
