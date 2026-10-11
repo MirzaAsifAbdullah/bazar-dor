@@ -41,7 +41,7 @@ interface ICategoryPageProps {
 
 const API_BASE = "https://openapi.programming-hero.com/api/bazardor";
 
-// Fetch category details
+
 async function getCategory(slug: string): Promise<ICategory | null> {
   const response = await fetch(
     `${API_BASE}/categories/${encodeURIComponent(slug)}`,
@@ -63,7 +63,7 @@ async function getCategory(slug: string): Promise<ICategory | null> {
   return category;
 }
 
-// Fetch products for the selected category
+
 async function getProducts(slug: string): Promise<IProduct[]> {
   const response = await fetch(
     `${API_BASE}/products?category=${encodeURIComponent(slug)}`,
@@ -81,7 +81,7 @@ async function getProducts(slug: string): Promise<IProduct[]> {
   return Array.isArray(products) ? products : [];
 }
 
-// Suspense boundary for URL-dependent data
+
 export default function CategoryPage(props: ICategoryPageProps) {
   return (
     <Suspense
@@ -101,7 +101,7 @@ export default function CategoryPage(props: ICategoryPageProps) {
   );
 }
 
-// All URL-dependent work happens inside this component
+
 async function CategoryPageContent({
   params,
   searchParams,
@@ -114,7 +114,7 @@ async function CategoryPageContent({
     getProducts(slug),
   ]);
 
-  // Category not found
+
   if (!category) {
     return (
       <main className="min-h-[calc(100vh-150px)] bg-[#f3f7f3] px-4 py-8">
@@ -142,7 +142,7 @@ async function CategoryPageContent({
     );
   }
 
-  // Sort products by today's price
+
   const sortedProducts = [...products];
 
   if (sort === "low") {
@@ -154,7 +154,7 @@ async function CategoryPageContent({
   return (
     <main className="min-h-[calc(100vh-150px)] bg-[#f3f7f3] px-4 py-8">
       <div className="mx-auto max-w-6xl">
-        {/* Category information */}
+      
         <section className="mb-3 rounded-xl border border-gray-200 bg-white px-5 py-4">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-100 text-2xl">
@@ -173,7 +173,7 @@ async function CategoryPageContent({
           </div>
         </section>
 
-        {/* Product sorting */}
+       
         <section className="mb-3 flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3">
           <p className="text-xs text-gray-500">
             মোট {sortedProducts.length.toLocaleString("bn-BD")}টি পণ্য
@@ -204,7 +204,7 @@ async function CategoryPageContent({
           </form>
         </section>
 
-        {/* Products */}
+      
         {sortedProducts.length > 0 ? (
           <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {sortedProducts.map((product) => (

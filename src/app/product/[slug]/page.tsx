@@ -115,7 +115,7 @@ const ProductPage = async ({ params }: IProductPageProps) => {
         marketAverages.length
       : product.today;
 
-  // Product unit labels
+
   const unitNames: Record<string, string> = {
     kg: "কেজি",
     liter: "লিটার",
@@ -125,7 +125,7 @@ const ProductPage = async ({ params }: IProductPageProps) => {
 
   const formattedUnit = unitNames[product.unit] || product.unit;
 
-  // Dynamic comparison with yesterday's price
+ 
   const priceDifference = product.today - product.yesterday;
 
   const priceMessage =
