@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 import { authClient } from "@/lib/auth-client";
-import Image from "next/image";
 
 const NavbarAuth = () => {
   const router = useRouter();
@@ -20,7 +20,10 @@ const NavbarAuth = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -33,27 +36,38 @@ const NavbarAuth = () => {
   }, []);
 
   const handleSignOut = async () => {
+    if (signingOut) return;
+
     setSigningOut(true);
 
-    const { error } = await authClient.signOut();
+    try {
+      const { error } = await authClient.signOut();
 
-    if (error) {
-      toast.error(error.message || "সাইন আউট করা যায়নি");
+      if (error) {
+        toast.error(error.message || "সাইন আউট করা যায়নি");
+        return;
+      }
 
+      setOpen(false);
+
+      toast.success("সফলভাবে সাইন আউট হয়েছে");
+
+      router.push("/signin");
+      router.refresh();
+    } catch {
+      toast.error("সাইন আউট করার সময় সমস্যা হয়েছে");
+    } finally {
       setSigningOut(false);
-      return;
     }
-
-    setOpen(false);
-
-    toast.success("সফলভাবে সাইন আউট হয়েছে");
-
-    router.push("/signin");
-    router.refresh();
   };
 
   if (isPending) {
-    return <div className="h-9 w-20 animate-pulse rounded-lg bg-gray-100" />;
+    return (
+      <div
+        className="h-9 w-20 animate-pulse rounded-lg bg-gray-100"
+        aria-label="লোড হচ্ছে"
+      />
+    );
   }
 
   if (!session?.user) {
@@ -78,25 +92,32 @@ const NavbarAuth = () => {
 
   const user = session.user;
 
+  const avatarFallback =
+    user.name?.trim().charAt(0).toUpperCase() || "U";
+
   return (
     <div ref={menuRef} className="relative">
-      {/* profile button */}
+      {/* Profile button */}
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
         className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition hover:bg-gray-50"
         aria-expanded={open}
         aria-haspopup="menu"
+        aria-label="প্রোফাইল মেনু"
       >
         {user.image ? (
           <Image
             src={user.image}
             alt={user.name || "প্রোফাইল"}
+            width={36}
+            height={36}
             className="h-9 w-9 rounded-full object-cover"
+            unoptimized
           />
         ) : (
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-600 text-sm font-bold text-white">
-            {user.name?.charAt(0).toUpperCase() || "U"}
+            {avatarFallback}
           </div>
         )}
 
@@ -105,7 +126,7 @@ const NavbarAuth = () => {
         </span>
 
         <span
-          className={`text-xs text-gray-400 transition ${
+          className={`text-xs text-gray-400 transition-transform ${
             open ? "rotate-180" : ""
           }`}
         >
@@ -113,7 +134,7 @@ const NavbarAuth = () => {
         </span>
       </button>
 
-      {/* profile dropdown */}
+      {/* Profile dropdown */}
       {open && (
         <div
           className="absolute right-0 top-full z-[100] mt-2 w-64 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg"
@@ -124,7 +145,9 @@ const NavbarAuth = () => {
               {user.name || "ব্যবহারকারী"}
             </p>
 
-            <p className="mt-1 truncate text-xs text-gray-500">{user.email}</p>
+            <p className="mt-1 truncate text-xs text-gray-500">
+              {user.email}
+            </p>
           </div>
 
           <div className="p-2">
@@ -146,8 +169,9 @@ const NavbarAuth = () => {
               role="menuitem"
             >
               <span>↪</span>
-
-              <span>{signingOut ? "সাইন আউট হচ্ছে..." : "সাইন আউট"}</span>
+              <span>
+                {signingOut ? "সাইন আউট হচ্ছে..." : "সাইন আউট"}
+              </span>
             </button>
           </div>
         </div>
